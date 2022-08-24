@@ -1,7 +1,7 @@
 import React from "react";
 import RegisterModal from "./components/RegisterModal";
 import { HeaderTabsColored } from "./components/Header";
-
+import "./App.css";
 import { HeaderTabsProps } from "./types/HeaderProps";
 import profileImage from "./Images/Profiles/profileImage.jpg";
 import { MantineProvider, Center, Group } from "@mantine/core";
@@ -10,8 +10,8 @@ import { BadgeCard } from "./components/Events";
 import { EventProps } from "./types/EventsProps";
 import eventImage from "./Images/Events/eventImage.jpg";
 import Logo from "./components/Logo";
-
-
+import { spacing } from "@mui/system";
+import { sizes } from "@mantine/core/lib/ActionIcon/ActionIcon.styles";
 
 const HeaderProps: HeaderTabsProps = {
   name: "Yoshifumi Matsumoto",
@@ -33,7 +33,7 @@ const EventsProps: EventProps = {
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <MantineProvider
         inherit
         theme={{ defaultGradient: { from: "blue", to: "teal", deg: 20 } }}
@@ -45,8 +45,15 @@ function App() {
             color: theme.white,
           })}
         >
-          <Logo />
-          <HeaderTabsColored {...HeaderProps} />
+          <div
+            
+          >
+            <Logo />
+          </div>
+
+          <div className="header">
+            <HeaderTabsColored {...HeaderProps} />
+          </div>
         </Center>
       </MantineProvider>
       <BadgeCard {...EventsProps} />
@@ -57,7 +64,6 @@ function App() {
     </div>
   );
 }
-
 
 
 export default App;
