@@ -8,7 +8,8 @@ export function SearchBar(props: TextInputProps) {
     <TextInput
       icon={<IconSearch size={18} stroke={1.5} />}
       radius="xl"
-      size="md"
+      size="xl"
+      width={200}
       
       rightSection={
         <ActionIcon size={32} radius="xl" color={theme.primaryColor} variant="filled">
@@ -20,7 +21,8 @@ export function SearchBar(props: TextInputProps) {
         </ActionIcon>
       }
       placeholder="Search..."
-      rightSectionWidth={90}
+      rightSectionWidth={60}
+
       {...props}
     />
   );

@@ -5,6 +5,7 @@ export interface EventProps {
     dateTime: string;
     capacity: number;
     description: string;
+    hostname: string;
     // badges: {
     //   emoji: string;
     //   label: string;

@@ -1,1 +1,14 @@
+.searchbar {
+  
+flex: auto;
+  padding-right: 10px;
+  /* background-color: orange; */
+  width: 300px;
+}
+
+.accountInfo{
+/* background-color: gray; */
+margin-left: 1800px;
+}
+
 
