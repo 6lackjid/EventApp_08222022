@@ -68,7 +68,9 @@ function App() {
           </Group>
         </MantineProvider>
       </div>
+      
       <BadgeCard {...EventsProps} />
+      
       <br />
       <br />
       <Page />
