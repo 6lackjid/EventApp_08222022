@@ -2,7 +2,7 @@
 import email
 from django.db import models
 import uuid
-from uuid_upload_path import upload_to
+
 # Create your models here.
 
 def profile_icon(instance, filename):
@@ -21,4 +21,4 @@ class Account(models.Model):
     password = models.CharField(max_length=70, verbose_name="パスワード")
     
     def __str__(self):
-        return str(self.account_id) +" | " +self.email
+        return str(self.account_id) +" _ " +self.email

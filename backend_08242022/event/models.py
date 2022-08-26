@@ -3,8 +3,8 @@ from django.db import models
 import uuid
 from account.models import Account 
 from django.core.validators import FileExtensionValidator 
-# from django_uuid_upload import upload_to_uuid
-from uuid_upload_path import upload_to
+
+
 
 
 def event_images(instance, filename):
@@ -26,4 +26,4 @@ class Event(models.Model):
     host = models.ForeignKey(Account, on_delete=models.PROTECT, default="")
      
     def __str__(self):
-        return str(self.event_id) + self.title + str(self.dateTime)
+        return str(self.event_id) +'_' + self.title + '_' + str(self.dateTime)
