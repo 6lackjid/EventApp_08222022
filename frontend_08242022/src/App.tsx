@@ -13,6 +13,7 @@ import Logo from "./components/Logo";
 import { DirectionControl } from "@mantine/ds";
 import { SearchBar } from "./components/SearchBar";
 import { display } from "@mui/system";
+import { LoginForm } from "./components/LoginModal";
 
 const HeaderProps: HeaderTabsProps = {
   name: "Yoshifumi Matsumoto",
@@ -59,6 +60,7 @@ function App() {
               {/* </Group> */}
 
               <div className="header">
+                
                 <HeaderTabsColored {...HeaderProps} />
               </div>
               <div className="searchbar">
@@ -75,6 +77,7 @@ function App() {
       <br />
       <Page />
       <br />
+      <LoginForm />
     </>
   );
 }
