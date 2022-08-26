@@ -1,26 +1,26 @@
+
 from pathlib import Path
-import datetime
-import os
-from local_setting import *
-import environ
+from .settings_local import *
+import os, environ
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()  
+env.read_env(os.path.join(BASE_DIR, 'settings_local'))  
 
-env = environ.Env()
-
+SECRET_KEY = env('SECRET_KEY')
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+DEBUG = env('DEBUG')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-environ.Env.read_env(os.path.join(BASE_DIR, 'local_setting.py'))
 
-SECRET_KEY=env('SECRET_KEY')
 
-DEBUG=env('DEBUG')
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env
 
 ALLOWED_HOSTS = []
 
@@ -34,39 +34,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
-    'rest_framework',
-    
-    'event.apps.EventConfig',
-    'account.apps.AccountConfig',
-    
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-}
-
-JWT_AUTH = {
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1), # リフレッシュした際のトークン期限
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # リフレッシュしても切れる最大のトークン期限
-}
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -130,18 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Tokyo'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
-
-# CORS_ORIGIN_REGEX_WHITELIST = (
-#     r'^(http?://)?localhost',
-#     r'^(http?://)?127.',
-# )
 
 
 # Static files (CSS, JavaScript, Images)
@@ -149,9 +114,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
