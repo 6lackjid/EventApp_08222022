@@ -1,16 +1,16 @@
 
 from pathlib import Path
-from .settings_local import *
+
 import os, environ
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()  
-env.read_env(os.path.join(BASE_DIR, 'settings_local'))  
+env.read_env(os.path.join(BASE_DIR,'.env'))  
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY=env('SECRET_KEY')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-DEBUG = env('DEBUG')
+DEBUG=env('DEBUG')
 
 
 # Quick-start development settings - unsuitable for production
@@ -20,7 +20,7 @@ DEBUG = env('DEBUG')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env
+
 
 ALLOWED_HOSTS = []
 
