@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Event
+from .serializers import EventSerializer
 
-# Create your views here.
+class PostViewSet(viewsets.ModelViewSet):
+    
+    queryset = Event.objects.all().order_by('-dateTime')
+    serializer_class = EventSerializer

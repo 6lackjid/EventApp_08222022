@@ -10,13 +10,13 @@ class AccountManager(BaseUserManager):
     def create_user(self, request_data, **kwargs):
         now = timezone.now()
         if not request_data['email']:
-            raise ValueError('Users must have an email address.')
+            raise ValueError('メールアドレスが正しくありません')
 
 
         user = self.model(
             username=request_data['username'],
             email=self.normalize_email(request_data['email']),
-            #normalize_emailで受け取ったデータがemailであるかをチェックしている
+            
             is_active=True,
             last_login=now,
             date_joined=now,
@@ -25,7 +25,7 @@ class AccountManager(BaseUserManager):
         user.set_password(request_data['password'])
         user.save(using=self._db)
         return user
-
+# createsuperuserで作成されるユーザーの定義
     def create_superuser(self, username, email, password, **extra_fields):
         request_data = {
             'username': username,
@@ -57,7 +57,7 @@ class Account(AbstractBaseUser):
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username', 'last_name','first_name']
 
     def user_has_perm(user, perm, obj):
         return _user_has_perm(user, perm, obj)
