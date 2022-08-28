@@ -102,5 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
-local_setting.py
-generate_secretkey_setting.py
+.env
+media
+event_images
