@@ -6,10 +6,7 @@ import django
 import os
 import sys
 
-# sys.path.append('/Users/tanakakenshou/Desktop/Twitter/twitter')
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'twitter.settings')
-# django.setup()
-from rest_framework_jwt.settings import api_settings
+# from rest_framework_jwt.settings import api_settings
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,6 +15,7 @@ from .models import Account, AccountManager
 
 
 class AuthRegister(generics.CreateAPIView):
+    model = Account
     permission_classes = (permissions.AllowAny,)
     serializer_class = AccountSerializer
 
@@ -29,7 +27,10 @@ class AuthRegister(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class AuthInfoGetView(generics.RetrieveAPIView):
+   
+
+class AccountInfoView(generics.RetrieveAPIView):
+    model = Account
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Account.objects.all()
     serializer_class = AccountSerializer

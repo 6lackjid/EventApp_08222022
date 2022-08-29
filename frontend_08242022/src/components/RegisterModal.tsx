@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Modal, Button, Group } from '@mantine/core';
+import { RegisterProps } from '../types/RegisterFormProps';
+import { RegisterContent } from './RegisterContent';
 
-const RegisterModal = () => {
+const RegisterModal:React.FC<RegisterProps> = () => {
   const [opened, setOpened] = useState(false);
 
   return (
@@ -9,9 +11,9 @@ const RegisterModal = () => {
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Introduce yourself!"
+        title="新規会員登録"
       >
-        {/* Modal content */}
+        <RegisterContent />
       </Modal>
 
       <Group position="center">

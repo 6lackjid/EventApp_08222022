@@ -14,6 +14,7 @@ import { DirectionControl } from "@mantine/ds";
 import { SearchBar } from "./components/SearchBar";
 import { display } from "@mui/system";
 import { LoginForm } from "./components/LoginModal";
+import { RegisterProps } from "./types/RegisterFormProps";
 
 const HeaderProps: HeaderTabsProps = {
   name: "Yoshifumi Matsumoto",
@@ -34,6 +35,13 @@ const EventsProps: EventProps = {
   // }[],
 };
 
+const RegisterationProps: RegisterProps = {
+
+  username: "",
+   email: "" ,
+   password:"",
+
+}
 function App() {
   return (
     <>
@@ -78,6 +86,9 @@ function App() {
       <Page />
       <br />
       <LoginForm />
+
+      <br/>
+      <RegisterModal  {...RegisterationProps} />
     </>
   );
 }

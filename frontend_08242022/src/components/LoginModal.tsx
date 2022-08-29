@@ -34,7 +34,7 @@ export function LoginForm(props: PaperProps) {
   return (
     <Paper radius="md" p="sm" withBorder {...props}>
       <Text size="lg" weight={300}>
-        Welcome to Mantine, {type} with
+       Login
       </Text>
 
       {/* <Group grow mb="md" mt="md">
@@ -58,7 +58,7 @@ export function LoginForm(props: PaperProps) {
           <TextInput
             required
             label="Email"
-            placeholder="hello@mantine.dev"
+            placeholder="**********@gmail.com"
             value={form.values.email}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
@@ -90,9 +90,9 @@ export function LoginForm(props: PaperProps) {
             onClick={() => toggle()}
             size="xs"
           >
-            {type === 'register'
-              ? 'Already have an account? Login'
-              : "Don't have an account? Register"}
+            {type === '登録'
+              ? 'アカウントをお持ちの方はこちら ログイン'
+              : "新規会員登録はこちら 新規会員登録"}
           </Anchor>
           <Button type="submit">{upperFirst(type)}</Button>
         </Group>
