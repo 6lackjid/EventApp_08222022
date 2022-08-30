@@ -80,4 +80,5 @@ class Account(AbstractBaseUser):
         swappable = 'AUTH_USER_MODEL'
 
 
-
+    def __str__(self):
+        return str(self.id) + '_' + self.username + '_' + self.email

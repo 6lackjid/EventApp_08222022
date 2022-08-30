@@ -15,6 +15,8 @@ import { SearchBar } from "./components/SearchBar";
 import { display } from "@mui/system";
 import { LoginForm } from "./components/LoginModal";
 import { RegisterProps } from "./types/RegisterFormProps";
+import EventDetail from "./components/EventDetail";
+import LoginAndRegiInHeader from "./components/LoginAndRegiInHeader";
 
 const HeaderProps: HeaderTabsProps = {
   name: "Yoshifumi Matsumoto",
@@ -36,21 +38,17 @@ const EventsProps: EventProps = {
 };
 
 const RegisterationProps: RegisterProps = {
-
   username: "",
-   email: "" ,
-   password:"",
-
-}
+  email: "",
+  password: "",
+};
 function App() {
   return (
     <>
       <div className="wholeheader">
         <MantineProvider
           inherit
-          theme={{ defaultGradient: { from: "blue", to: "teal", deg: 20 },
-        
-       }}
+          theme={{ defaultGradient: { from: "blue", to: "teal", deg: 20 } }}
         >
           <Group position="apart" grow>
             <Center
@@ -68,8 +66,9 @@ function App() {
               {/* </Group> */}
 
               <div className="header">
-                
                 <HeaderTabsColored {...HeaderProps} />
+                <LoginAndRegiInHeader />
+
               </div>
               <div className="searchbar">
                 <SearchBar />
@@ -78,17 +77,25 @@ function App() {
           </Group>
         </MantineProvider>
       </div>
-      
+
       <BadgeCard {...EventsProps} />
-      
+
       <br />
       <br />
       <Page />
       <br />
-      <LoginForm />
+      
 
-      <br/>
-      <RegisterModal  {...RegisterationProps} />
+      <br />
+      
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <EventDetail {...EventsProps} />
     </>
   );
 }

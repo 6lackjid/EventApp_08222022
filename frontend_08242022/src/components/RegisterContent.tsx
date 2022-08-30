@@ -45,11 +45,7 @@ export const RegisterContent =() =>  {
           {...form.getInputProps('passwordConfirm')}
         />
 
-        <Checkbox
-          mt="md"
-          label="I agree to sell my privacy"
-          {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-        />
+        
 
         <Group position="right" mt="md">
           <Button type="submit">Submit</Button>

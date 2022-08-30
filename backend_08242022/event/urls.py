@@ -10,8 +10,8 @@ router.register(r'user-event', UserEventViewSet)
 urlpatterns = [
     path('', EventsListView.as_view(), name='events-list'),
     path('', include(router.urls)),
-    path('{uuid:event_id}/', EventDetailView.as_view(), name='event-detail'),
-    path('mypage/event-history/<host>', MyEventHistory.as_view(), name='event-history')
-    
+    path('<uuid:event_id>/', EventDetailView.as_view(), name='event-detail'),
+    path('mypage/event-history/<str:host>/', MyEventHistory.as_view(), name='event-history')
+    # 
     # path('post/', )
 ]

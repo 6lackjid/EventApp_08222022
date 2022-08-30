@@ -9,6 +9,28 @@ flex: auto;
 .accountInfo{
 /* background-color: gray; */
 margin-left: 1800px;
+
+
+
+/* position: fixed; */
+}
+
+.search{
+  width: 500px;
+  margin-left:auto;
 }
 
 
+
+.loginRegi1{
+color: white;
+background-color: #16AE9E;
+border: 1px solid #333;
+margin-left: auto;
+}
+
+.loginRegi2{
+  color: white;
+  background-color: #16AE9E;
+  border: 1px solid #333;
+}

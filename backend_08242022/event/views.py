@@ -1,4 +1,5 @@
 import email
+from urllib import request
 from rest_framework import viewsets
 from .models import Event
 from .serializers import EventSerializer
@@ -6,6 +7,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated,AllowAny,IsAuthenticatedOrReadOnly
 from rest_framework import authentication, permissions, generics, status, viewsets, filters
 from django.http import HttpResponse, Http404
+
 import sys
 sys.path.append('../')
 from auth_api.models import Account
@@ -51,13 +53,19 @@ class EventDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticatedOrReadOnly,) 
     
     
-class MyEventHistory(generics.RetrieveUpdateAPIView):
+class MyEventHistory(generics.RetrieveUpdateDestroyAPIView):
     model = Event
     serializer_class = EventSerializer
-    queryset = Event.objects.filter()
     permission_classes = (IsAuthenticated,)
-    
     lookup_field = 'host'
+    
+    
+    queryset = Event.objects.filter()
+    
+    print(queryset)
+   
+    
+    
     
     # def get_queryset(self, *args, **kwargs):
     #     return super().get_queryset(*args, **kwargs).filter(
@@ -65,12 +73,12 @@ class MyEventHistory(generics.RetrieveUpdateAPIView):
     #     )
     
     # get_sameuserevents = Event.objects.filter(host_id=str(Account.pk))
-    def get_a_user_events(self, request, **kwargs):
+    # def get_a_user_events(self, request, **kwargs):
         
     #     return Response(data={
     #         'host': request.host.host_id,
             
     #     },
     #     status=status.HTTP_200_OK)
-        event_by_user = Event.objects.filter(host_id=self.kwargs['host'])
-        return event_by_user
+        # event_by_user = Event.objects.filter(host_id=self.kwargs['host'])
+        # return event_by_user

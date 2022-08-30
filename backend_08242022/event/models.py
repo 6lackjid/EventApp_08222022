@@ -23,4 +23,4 @@ class Event(models.Model):
     host = models.ForeignKey(Account, on_delete=models.PROTECT)
      
     def __str__(self):
-        return str(self.event_id) +'_' + self.title + '_' +str(self.dateTime)
+        return str(self.event_id) +'_' + self.title + '_' +str(self.dateTime) + '_' + str(self.host)

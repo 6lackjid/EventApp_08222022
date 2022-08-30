@@ -57,7 +57,6 @@ const useStyles = createStyles((theme) => ({
 
   mainSection: {
     paddingBottom: theme.spacing.sm,
-
   },
 
   user: {
@@ -144,110 +143,114 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   return (
-    <><div className="accountInfo">
-      <Group position="right">
-        <Container className={classes.mainSection}>
-          
+    <>
+      <div className="accountInfo">
+        <Group position="right">
+          <Container className={classes.mainSection}>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              className={classes.burger}
+              size="sm"
+              color={theme.white}
+            />
 
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            className={classes.burger}
-            size="sm"
-            color={theme.white}
-          />
+            <Menu
+              width={400}
+              position="bottom-end"
+              transition="pop-top-right"
+              onClose={() => setUserMenuOpened(false)}
+              onOpen={() => setUserMenuOpened(true)}
+            >
+              <Menu.Target>
+                <UnstyledButton
+                  className={cx(classes.user, {
+                    [classes.userActive]: userMenuOpened,
+                  })}
+                >
+                  <Group spacing={30}>
+                    <Avatar
+                      src={ProfileImage}
+                      alt={name}
+                      radius="xl"
+                      size={60}
+                    />
+                    <Text
+                      weight={800}
+                      size="sm"
+                      sx={{ lineHeight: 1, color: theme.white }}
+                      mr={7}
+                    >
+                      {name}
+                    </Text>
+                    <IconChevronDown size={12} stroke={1.5} />
+                  </Group>
+                </UnstyledButton>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Label>イベント</Menu.Label>
+                <Menu.Item
+                  icon={
+                    <IconHeart
+                      size={40}
+                      stroke={1.5}
+                      color={theme.colors.red[6]}
+                    />
+                  }
+                >
+                  お気に入りイベント
+                </Menu.Item>
+                <Menu.Item
+                  icon={
+                    <IconStar
+                      size={40}
+                      stroke={1.5}
+                      color={theme.colors.yellow[6]}
+                    />
+                  }
+                >
+                  マイイベント
+                </Menu.Item>
+                <Menu.Item
+                  icon={
+                    <IconHistory
+                      size={40}
+                      stroke={1.5}
+                      color={theme.colors.red[6]}
+                    />
+                  }
+                >
+                  参加履歴
+                </Menu.Item>
 
-          <Menu
-            width={400}
-            position="bottom-end"
-            transition="pop-top-right"
-            onClose={() => setUserMenuOpened(false)}
-            onOpen={() => setUserMenuOpened(true)}
-          >
-            <Menu.Target>
-              <UnstyledButton
-                className={cx(classes.user, {
-                  [classes.userActive]: userMenuOpened,
-                })}
-              >
-                <Group spacing={30}>
-                  <Avatar src={ProfileImage} alt={name} radius="xl" size={60} />
-                  <Text
-                    weight={800}
-                    size="sm"
-                    sx={{ lineHeight: 1, color: theme.white }}
-                    mr={7}
-                  >
-                    {name}
-                  </Text>
-                  <IconChevronDown size={12} stroke={1.5} />
-                </Group>
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Label>イベント</Menu.Label>
-              <Menu.Item
-                icon={
-                  <IconHeart
-                    size={40}
-                    stroke={1.5}
-                    color={theme.colors.red[6]}
-                  />
-                }
-              >
-                お気に入りイベント
-              </Menu.Item>
-              <Menu.Item
-                icon={
-                  <IconStar
-                    size={40}
-                    stroke={1.5}
-                    color={theme.colors.yellow[6]}
-                  />
-                }
-              >
-                マイイベント
-              </Menu.Item>
-              <Menu.Item
-                icon={
-                  <IconHistory
-                    size={40}
-                    stroke={1.5}
-                    color={theme.colors.red[6]}
-                  />
-                }
-              >
-                参加履歴
-              </Menu.Item>
+                <Menu.Label>アカウント</Menu.Label>
+                <Menu.Item icon={<IconAlien size={40} stroke={1.5} />}>
+                  プロフィール
+                </Menu.Item>
+                <Menu.Item icon={<IconLogout size={40} stroke={1.5} />}>
+                  ログアウト
+                </Menu.Item>
 
-              <Menu.Label>アカウント</Menu.Label>
-              <Menu.Item icon={<IconAlien size={40} stroke={1.5} />}>
-                プロフィール
-              </Menu.Item>
-              <Menu.Item icon={<IconLogout size={40} stroke={1.5} />}>
-                ログアウト
-              </Menu.Item>
+                <Menu.Divider />
 
-              <Menu.Divider />
+                <Menu.Label>設定</Menu.Label>
+                <Menu.Item icon={<IconSettings size={40} stroke={1.5} />}>
+                  設定
+                </Menu.Item>
 
-              <Menu.Label>設定</Menu.Label>
-              <Menu.Item icon={<IconSettings size={40} stroke={1.5} />}>
-                設定
-              </Menu.Item>
+                <Menu.Item
+                  color="red"
+                  icon={<IconTrash size={40} stroke={1.5} />}
+                >
+                  アカウント削除
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Container>
+        </Group>
 
-              <Menu.Item
-                color="red"
-                icon={<IconTrash size={40} stroke={1.5} />}
-              >
-                アカウント削除
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        </Container>
-      </Group>
-
-      {/* <Container> */}
-      {/* <Tabs
+        {/* <Container> */}
+        {/* <Tabs
           variant="outline"
           classNames={{
             root: classes.tabs,
@@ -255,7 +258,7 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
             tab: classes.tab,
           }}
         ></Tabs> */}
-      {/* </Container> */}
+        {/* </Container> */}
       </div>
     </>
   );

@@ -5,11 +5,11 @@ export function SearchBar(props: TextInputProps) {
   const theme = useMantineTheme();
 
   return (
-    <TextInput
+    <TextInput className='search'
       icon={<IconSearch size={18} stroke={1.5} />}
       radius="xl"
       size="xl"
-      width={200}
+      width={100}
       
       rightSection={
         <ActionIcon size={32} radius="xl" color={theme.primaryColor} variant="filled">
