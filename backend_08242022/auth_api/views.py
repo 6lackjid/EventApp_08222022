@@ -6,13 +6,21 @@ import django
 import os
 import sys
 
-# from rest_framework_jwt.settings import api_settings
-from rest_framework.exceptions import AuthenticationFailed
+# sys.path.append('../')
+# from .settings import api_settings,JSONRenderer,BrowsableAPIRenderer,JSONParser,FormParser,MultiPartParser
+# from .exceptions import AuthenticationFailed
 from rest_framework.response import Response
-from rest_framework.views import APIView
+# from .views import APIView
 from .serializers import AccountSerializer
 from .models import Account, AccountManager
-
+from .serializers import MyTokenObtainPairSerializer,TokenObtainPairResponseSerializer,TokenRefreshResponseSerializer
+# from .views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+    
+# )
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+from drf_yasg.utils import swagger_auto_schema
 
 class AuthRegister(generics.CreateAPIView):
     model = Account
@@ -37,8 +45,26 @@ class AccountInfoView(generics.RetrieveAPIView):
 
     def get(self, request, format=None):
         return Response(data={
-            'id': request.user.id,
+            # 'acccount_id': request.user.account_id,
             'username': request.user.username,
             'email': request.user.email,
+            'ProfileImage': str(request.user.ProfileImage),
         },
         status=status.HTTP_200_OK)
+        
+        
+class ObtainTokenPairWithColorView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+    
+
+class DecoratedTokenObtainPairView(TokenObtainPairView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: TokenObtainPairResponseSerializer})
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+class DecoratedTokenRefreshView(TokenRefreshView):
+    @swagger_auto_schema(responses={status.HTTP_200_OK: TokenRefreshResponseSerializer})
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+    
+

@@ -1,6 +1,5 @@
-import React from "react";
-
-import { IconHeart } from "@tabler/icons";
+import React, { useState, useEffect, Fragment } from "react";
+import "../App.css";
 import {
   Card,
   Image,
@@ -10,14 +9,24 @@ import {
   Button,
   ActionIcon,
   createStyles,
+  Modal,
+  Container,
 } from "@mantine/core";
 import { EventProps } from "../types/EventsProps";
 import { Grid } from "@mantine/core";
+import axios from "axios";
+import { ThemeContext } from "@emotion/react";
+import eventImage from "../Images/Events/eventImage.jpg";
+import { display } from "@mui/system";
 
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+
+    // width: 902,
+    
+    
   },
 
   section: {
@@ -29,10 +38,7 @@ const useStyles = createStyles((theme) => ({
     paddingBottom: theme.spacing.md,
   },
 
-  like: {
-    color: theme.colors.red[6],
-  },
-
+  
   label: {
     textTransform: "uppercase",
     fontSize: theme.fontSizes.xs,
@@ -40,73 +46,83 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const BadgeCard: React.FC<EventProps> = ({
-  EventImage,
-  title,
-  description,
-  location,
-  capacity,
-  dateTime,
-  hostname
-  // badges,
-}) => {
+// {EventImage1, EventImage2, EventImage3, event_id, location, description, capacity, title, host,dateTime}:
+const EventsCard: React.FC<EventProps> = (props: EventProps) => {
   const { classes, theme } = useStyles();
-
-  // const features = badges.map((badge) => (
-  // <Badge
-  //   color={theme.colorScheme === "dark" ? "dark" : "gray"}
-  //   key={badge.label}
-  //   leftSection={badge.emoji}
-  // >
-  //   {badge.label}
-  // </Badge>
-  // ));
+  const [opened, setOpened] = useState(false);
 
   return (
-    <Grid>
-      <Grid.Col span={3}>
+    
+    <Grid className="grid-cards" >
+      <Grid.Col  key={props.event_id} className="grid-col" >
         <Card withBorder radius="md" p="md" className={classes.card}>
-          <Card.Section>
-            <Image src={EventImage} alt={title} height={300} width={300} />
-            
+          <Card.Section className="images">
+            <Image
+              className="image"
+              src={props.EventImage1}
+              alt={props.title}
+              height={300}
+              width={260}
+              withPlaceholder
+            />
+            <Image
+              className="image"
+              src={props.EventImage2}
+              alt={props.title}
+              height={300}
+              width={260}
+              withPlaceholder
+              
+            />
+            <Image
+              className="image"
+              src={props.EventImage3}
+              alt={props.title}
+              height={300}
+              width={260}
+              withPlaceholder
+            />
           </Card.Section>
 
           <Card.Section className={classes.section} mt="md">
             <Group position="apart">
               <Text size="lg" weight={800}>
-                {title}
+                {props.title}
                 <br />
-                {dateTime}
+                {props.dateTime}
               </Text>
-              <Badge size="sm">{location}</Badge>
+              <Badge size="xl">{props.location}</Badge>
             </Group>
             <Text size="lg" weight={500}>
-              定員:{capacity}名
+              定員:{props.capacity}名
             </Text>
             <Text size="sm" mt="xs">
-              {description}
+              {props.description}
             </Text>
-            
           </Card.Section>
 
           <Card.Section className={classes.section}>
             <Text mt="md" className={classes.label} color="dimmed">
               host
             </Text>
-            
-            <Text size="sm">{hostname}</Text>
+
+            <Text size="sm">{props.host}</Text>
           </Card.Section>
 
           <Group mt="xs">
-            <Button radius="md" style={{ flex: 1 }}>
-              詳細
-            </Button>
-            {/* <ActionIcon variant="default" radius="md" size={36}>
-              <IconHeart size={18} className={classes.like} stroke={1.5} />
-            </ActionIcon> */}
-          </Group>
+        <Button radius="md" style={{ flex: 1 }}>
+          参加
+        </Button>
+        
+      </Group>
         </Card>
       </Grid.Col>
+      
+      
+      
     </Grid>
+    
   );
 };
+
+export default EventsCard;

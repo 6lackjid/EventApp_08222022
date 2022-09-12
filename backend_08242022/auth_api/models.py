@@ -4,7 +4,14 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, _user_
 from django.core import validators
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+import uuid
 
+def profile_image(instance, filename):
+    ext = filename.split('.')[-1]
+    username = instance.username 
+    email = instance.email
+    account_id = instance.account_id
+    return f'profile_image/{account_id}/{username}/{email}'
 
 class AccountManager(BaseUserManager):
     def create_user(self, request_data, **kwargs):
@@ -42,12 +49,15 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
+    account_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(_('username'), max_length=30, unique=True)
     first_name = models.CharField(
         _('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     email = models.EmailField(
         verbose_name='email address', max_length=255, unique=True)
+    
+    ProfileImage = models.ImageField(verbose_name="プロフィール画像",upload_to=profile_image, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -81,4 +91,6 @@ class Account(AbstractBaseUser):
 
 
     def __str__(self):
-        return str(self.id) + '_' + self.username + '_' + self.email
+        return self.username 
+    #  + '_' + self.email  + '|____|' + str(self.account_id) 
+    #   

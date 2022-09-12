@@ -40,6 +40,7 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchBar } from "./SearchBar";
+import axios from "axios";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -135,12 +136,37 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
-  name,
+  username,
   ProfileImage,
 }) => {
   const { classes, theme, cx } = useStyles();
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const loginedInfoUrl = "http://127.0.0.1:8000/api/account/mypage/";
+
+  React.useEffect(() => {
+    const GetMypageInfo = async (e:any) => {
+      e.preventDefault();
+      await axios
+        .post<HeaderTabsProps[]>(
+          loginedInfoUrl,
+          
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          // setHeaderProps(res.data);
+          // setIsLogined(true);
+        })
+        .catch((err: any) => {});
+    };
+    
+  });
+
 
   return (
     <>
@@ -168,10 +194,11 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                     [classes.userActive]: userMenuOpened,
                   })}
                 >
+                  {/* HeaderProps.map((HeaderProp: HeaderTabsProps[]) => { */}
                   <Group spacing={30}>
                     <Avatar
                       src={ProfileImage}
-                      alt={name}
+                      alt={username}
                       radius="xl"
                       size={60}
                     />
@@ -181,7 +208,7 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                       sx={{ lineHeight: 1, color: theme.white }}
                       mr={7}
                     >
-                      {name}
+                      {username}
                     </Text>
                     <IconChevronDown size={12} stroke={1.5} />
                   </Group>
@@ -189,17 +216,7 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Label>イベント</Menu.Label>
-                <Menu.Item
-                  icon={
-                    <IconHeart
-                      size={40}
-                      stroke={1.5}
-                      color={theme.colors.red[6]}
-                    />
-                  }
-                >
-                  お気に入りイベント
-                </Menu.Item>
+                
                 <Menu.Item
                   icon={
                     <IconStar
@@ -211,17 +228,7 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                 >
                   マイイベント
                 </Menu.Item>
-                <Menu.Item
-                  icon={
-                    <IconHistory
-                      size={40}
-                      stroke={1.5}
-                      color={theme.colors.red[6]}
-                    />
-                  }
-                >
-                  参加履歴
-                </Menu.Item>
+                
 
                 <Menu.Label>アカウント</Menu.Label>
                 <Menu.Item icon={<IconAlien size={40} stroke={1.5} />}>
@@ -248,17 +255,9 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
             </Menu>
           </Container>
         </Group>
+      {/* } */}
+      
 
-        {/* <Container> */}
-        {/* <Tabs
-          variant="outline"
-          classNames={{
-            root: classes.tabs,
-            tabsList: classes.tabsList,
-            tab: classes.tab,
-          }}
-        ></Tabs> */}
-        {/* </Container> */}
       </div>
     </>
   );

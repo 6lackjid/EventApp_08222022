@@ -9,17 +9,17 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR,'.env'))  
 
 SECRET_KEY=env('SECRET_KEY')
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 DEBUG=env('DEBUG')
 
 
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'auth_api.Account'
-# Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     
     
     'auth_api.apps.AuthApiConfig',
-    'event.apps.EventConfig',
-    
+    'events.apps.EventsConfig',
+    'drf_yasg',
     
 ]
 
@@ -45,7 +45,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:3000',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -55,19 +55,31 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    
+    
     'DEFAULT_PAGINATION_CLASS': 
     'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     
 }
 
-JWT_AUTH = {
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+SIMPLE_JWT = {
+    
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    #暗号のアルゴリズム設定
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'account_id',
+    'USER_ID_CLAIM': 'account_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
 }
+
 
 
 MIDDLEWARE = [
@@ -78,6 +90,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',            
+    'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', 
 ]
 
 ROOT_URLCONF = 'backend_08242022.urls'
@@ -85,7 +100,9 @@ ROOT_URLCONF = 'backend_08242022.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,8 +118,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend_08242022.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -112,8 +127,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -131,8 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
+
 
 LANGUAGE_CODE = 'ja'
 
@@ -143,15 +155,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
+
 
 STATIC_URL = 'static/'
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,6 +1,4 @@
-export interface HeaderTabsProps {
-     name: string;
-      ProfileImage: string ;
-   
-  }
-  
+export type HeaderTabsProps ={
+  username: string;
+  ProfileImage: string;
+}
