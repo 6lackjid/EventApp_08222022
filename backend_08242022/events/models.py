@@ -27,6 +27,8 @@ class Events(models.Model):
     EventImage3 = models.ImageField(verbose_name="イベントのイメージ3",upload_to=event_images)
     
     host = models.ForeignKey(Account, on_delete=models.PROTECT)
-     
+    
+    
+    
     def __str__(self):
-        return str(self.event_id) +'_' + self.title + '_' +str(self.dateTime) + '_' + str(self.host)
+        return str(self.event_id) +'_' + self.title + '_' +str(self.dateTime) + '_' + str(self.host) 

@@ -59,8 +59,8 @@ const App = () => {
         const res = await axios.get<EventProps[]>(url).then((res: any) => {
           setResults(res.data.results);
 
-          console.log(res);
-          console.log(res.data);
+          // console.log(res);
+          // console.log(res.data);
         });
       } catch (err) {
         console.log(err);
@@ -74,7 +74,7 @@ const App = () => {
 
   return (
     <>
-    <AuthContextProvider 
+    <AuthContextProvider  value = {{isLogined}}
       >
       <div className="wholeheader">
         <MantineProvider
@@ -128,7 +128,7 @@ const App = () => {
       </div>
       <br />
       <br />
-      <Page />
+      {/* <Page /> */}
       <br />
 
       <br />

@@ -46,7 +46,7 @@ export const Login = (props: PaperProps) => {
       .oneOf([Yup.ref("password")], "passwordが一致しません。")
       .required("password(確認用)は必須です。"),
   });
-  // const { isLogined, login } = useContext(AuthContext);
+
   const urlRegisterAccount = "http://127.0.0.1:8000/api/account/register/";
   const urlLoginAccount = "http://127.0.0.1:8000/api/account/token/create/";
   const [username, setUserName] = useState("");
@@ -79,7 +79,10 @@ export const Login = (props: PaperProps) => {
       passwordConfirm: "",
     },
 
-    
+    validate: {
+      passwordConfirm: (value, values) =>
+        value !== values.password ? 'パスワードが一致しません' : null,
+    },
   });
 
   const setFieldValue = (e: any) => {

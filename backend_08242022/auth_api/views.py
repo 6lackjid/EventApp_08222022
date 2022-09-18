@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_list_or_404, get_object_or_404
 from django.db import transaction
 from django.http import HttpResponse, Http404
 from rest_framework import authentication, permissions, generics, status, viewsets, filters
 import django
 import os
 import sys
-
+from django.contrib.auth.decorators import login_required
 # sys.path.append('../')
 # from .settings import api_settings,JSONRenderer,BrowsableAPIRenderer,JSONParser,FormParser,MultiPartParser
 # from .exceptions import AuthenticationFailed
@@ -21,7 +21,9 @@ from .serializers import MyTokenObtainPairSerializer,TokenObtainPairResponseSeri
 # )
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 from drf_yasg.utils import swagger_auto_schema
+from django.contrib.auth.decorators import login_required
 
+from rest_framework.permissions import IsAuthenticated
 class AuthRegister(generics.CreateAPIView):
     model = Account
     permission_classes = (permissions.AllowAny,)
@@ -45,13 +47,65 @@ class AccountInfoView(generics.RetrieveAPIView):
 
     def get(self, request, format=None):
         return Response(data={
-            # 'acccount_id': request.user.account_id,
+            'acccount_id': request.user.account_id,
+            'last_name': request.user.last_name,
+            'first_name': request.user.first_name,
             'username': request.user.username,
             'email': request.user.email,
             'ProfileImage': str(request.user.ProfileImage),
         },
         status=status.HTTP_200_OK)
         
+        
+# test
+class MyAccountListView(generics.ListAPIView):
+    queryset = Account.objects.all()
+    serialzers_class = AccountSerializer
+    
+    def get_queryset(self):
+        return self.queryset.filter(host=self.request.user)
+    
+        
+
+
+# @login_required
+class AccountChangeView(generics.RetrieveUpdateDestroyAPIView):
+  
+    
+      model = Account
+    #   fields = ["username", "email", "ProfileImage"]
+      permission_classes = (permissions.IsAuthenticated,)
+      queryset = Account.objects.all()
+      serializer_class = AccountSerializer
+      lookup_field = 'account_id'
+    #   def get_object(self):
+    #         queryset = self.get_queryset()
+    #         obj = get_object_or_404(queryset, account_id=self.request.account_id)
+    #         return obj
+    #   @login_required
+      def post(self, request, format=None):
+        account_id = request.user.account_id
+        
+        return Response(data={
+            'account_id':request.user.account_id,
+            
+            'username': request.user.username,
+            'last_name': request.user.last_name,
+            'first_name': request.user.first_name,
+            'email': request.user.email,
+            'ProfileImage': request.user.ProfileImage,
+        },
+        status=status.HTTP_200_OK)
+        
+    #   @login_required
+      def update(self, request, format=None):
+        return Response(data={
+            'account_id': request.user.account_id,
+            'username': request.user.username,
+            'email': request.user.email,
+            'ProfileImage': request.user.ProfileImage,
+        },
+        status=status.HTTP_200_OK)   
         
 class ObtainTokenPairWithColorView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -67,4 +121,3 @@ class DecoratedTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
     
-

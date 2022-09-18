@@ -11,7 +11,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     # path('accounts/', include('django.contrib.auth.urls')), 
-    
+    path('api/auth/', include('djoser.urls.jwt')),
+
     path('api/account/', include('auth_api.urls')),
     path('api/events/', include('events.urls'))
 ]

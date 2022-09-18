@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext,useEffect } from "react";
 import {
   createStyles,
   Container,
@@ -41,7 +41,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { SearchBar } from "./SearchBar";
 import axios from "axios";
-
+import { AuthContext } from "./Auth";
+import { useCookies } from "react-cookie";
 const useStyles = createStyles((theme) => ({
   header: {
     paddingTop: theme.spacing.sm,
@@ -135,41 +136,45 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
-  username,
-  ProfileImage,
-}) => {
+export const HeaderTabsColored: React.FC<HeaderTabsProps> = (HeaderTabsProp) => {
   const { classes, theme, cx } = useStyles();
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const { isLogined, login } = useContext(AuthContext);
   const loginedInfoUrl = "http://127.0.0.1:8000/api/account/mypage/";
+  const [accountInfo, setAccountInfo] = useState<HeaderTabsProps>({username:"", ProfileImage:""});
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
 
-  React.useEffect(() => {
-    const GetMypageInfo = async (e:any) => {
-      e.preventDefault();
-      await axios
-        .post<HeaderTabsProps[]>(
-          loginedInfoUrl,
-          
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-          // setHeaderProps(res.data);
-          // setIsLogined(true);
-        })
-        .catch((err: any) => {});
-    };
+    if (isLogined){
     
-  });
+      getAccountInfo();
+      
+    };
 
+    
+  }, []);
+
+const getAccountInfo = async () => {
+    try {
+      const res = await axios.get<HeaderTabsProps[]>(loginedInfoUrl).then((res: any) => {
+        setAccountInfo(res.data);
+        
+        // console.log(res);
+        // console.log(res.data);
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
+      
+      {/* {Object.values(HeaderTabsProps).map((HeaderTabsProp: HeaderTabsProps) =>( */}
       <div className="accountInfo">
         <Group position="right">
           <Container className={classes.mainSection}>
@@ -194,11 +199,11 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                     [classes.userActive]: userMenuOpened,
                   })}
                 >
-                  {/* HeaderProps.map((HeaderProp: HeaderTabsProps[]) => { */}
+                  
                   <Group spacing={30}>
                     <Avatar
-                      src={ProfileImage}
-                      alt={username}
+                      src={HeaderTabsProp.ProfileImage}
+                      alt={HeaderTabsProp.username}
                       radius="xl"
                       size={60}
                     />
@@ -208,15 +213,18 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                       sx={{ lineHeight: 1, color: theme.white }}
                       mr={7}
                     >
-                      {username}
+                      {HeaderTabsProp.username}
                     </Text>
                     <IconChevronDown size={12} stroke={1.5} />
                   </Group>
+                  {/* } */}
+                  )
+                  {/* } */}
                 </UnstyledButton>
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Label>イベント</Menu.Label>
-                
+
                 <Menu.Item
                   icon={
                     <IconStar
@@ -228,7 +236,6 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
                 >
                   マイイベント
                 </Menu.Item>
-                
 
                 <Menu.Label>アカウント</Menu.Label>
                 <Menu.Item icon={<IconAlien size={40} stroke={1.5} />}>
@@ -255,10 +262,8 @@ export const HeaderTabsColored: React.FC<HeaderTabsProps> = ({
             </Menu>
           </Container>
         </Group>
-      {/* } */}
-      
-
       </div>
+       {/* ))} */}
     </>
   );
 };

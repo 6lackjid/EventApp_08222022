@@ -5,16 +5,20 @@ import email
 from urllib import request
 from rest_framework import viewsets
 from .models import Events
-from .serializers import EventSerializer, HistoryFilter
+from .serializers import EventSerializer
 # myHistoryEventSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated,AllowAny,IsAuthenticatedOrReadOnly
 from rest_framework import authentication, permissions, generics, status, viewsets, filters
 from django.http import HttpResponse, Http404
-
+from rest_framework.response import Response
 import sys
 sys.path.append('../')
 from auth_api.models import Account
+from .permissions import IsHostOrReadOnly
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class EventsListView(generics.ListAPIView):
@@ -35,6 +39,8 @@ class UserEventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     
     # def retrieve(self, request, pk):
+    def perform_create(self, serializer, **kwargs):
+        serializer.save(user=self.request.user)
         
         
         
@@ -56,32 +62,66 @@ class EventDetailView(generics.RetrieveUpdateDestroyAPIView):
     model = Events
     serializer_class = EventSerializer
     queryset = Events.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly,) 
+    permission_classes = (IsHostOrReadOnly,)
     
+    lookup_field = 'event_id'
     
-class MyEventHistory(generics.RetrieveUpdateDestroyAPIView):
+class MyEventHistory(generics.ListAPIView):
     model = Events
-    serializer_class = HistoryFilter
+    serializer_class = EventSerializer
     permission_classes = (IsAuthenticated,)
-    lookup_field = 'host'
-    queryset = Events.objects.all()
+    lookup_field = 'account_id'
+    # myevents = Events.objects.filter(host=self.request.host).all()
     # def get_queryset(self):
-       
+    def get_queryset(self):
+        current_user = self.request.user
+        if current_user.is_superuser: # スーパーユーザの場合、リストにすべてを表示する。
+            return Events.objects.all()
+        else: # 一般ユーザは自分のレコードのみ表示する。
+            return Events.objects.filter(host=current_user.account_id).all()
+   
     
         
-        # queryhost = self.request.query_params.get('host')
+        
+        
+        
+        
 
-        # if queryhost:
-        #     queryset = queryset.filter(host=queryhost)
+class PostEventView(generics.CreateAPIView,LoginRequiredMixin):
     
+    model = Events
+    queryset = Events.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = (IsAuthenticated, )
+    
+    def get_object(self):
+        try:
+            instance = self.queryset.get(host=self.request.user)
+            return instance
+        except Events.DoesNotExist:
+            raise Http404
+    # def perform_create(self,request, *args, **kwargs):
+    #     current_user = self.request.user
+    #     host=current_user.account_id
+        # return Response(data={
+        #     'host': request.user.username,
+            
+        #     },
+        #     status=status.HTTP_200_OK)
+    def get_object(self):
+        current_user = self.request.user
+        return current_user.account_id
+        return self.request.user
+    def perform_create(self, serializer):
+        serializer.save(host=self.request.user)
     # def get_queryset(self):
-       
-        # queryset = Events.objects.all()
-        # host = self.request.query_params.get('host')
-        # if host is not None:
-        #     queryset = queryset.filter(Events__host=host)
-        
-    # def get_queryset(self):
-    #     queryset = Events.objects.filter(host=self.kwargs["host"], idlistaprecio=self.kwargs["email"])
-        
-        # return queryset
+    #     return Events.objects.filter(host=self.request.user.host)
+    # def has_object_permission(self, request, view, obj):
+    #     """自身のみがGET（詳細）・PUT・PATCH・DELETE許可"""
+    #     return obj == request.user
+    def get(self, request, format=None):
+        return Response(data={
+            'host': request.user.username,
+            
+            },
+            status=status.HTTP_200_OK)
